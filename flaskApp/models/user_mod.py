@@ -34,11 +34,11 @@ class User_cls:
             isValid = False
             flash("Email already in use.")
         
-        # q_two = 'select * from user where userName = %(userName)s;'
-        # result_two = connectToMySQL(User_cls.db).query_db(q_two, user)
-        # if len(result_two) >= 1: # somewhat clumsy way (??) of saying, if one or more results!
-        #     isValid = False
-        #     flash("Username already in use.")
+        q_two = 'select * from user where userName = %(userName)s;'
+        result_two = connectToMySQL(User_cls.db).query_db(q_two, user)
+        if len(result_two) >= 1: # somewhat clumsy way (??) of saying, if one or more results!
+            isValid = False
+            flash("Username already in use.")
 
         if not EMAIL_REGEX.match(user['email']): 
             isValid = False

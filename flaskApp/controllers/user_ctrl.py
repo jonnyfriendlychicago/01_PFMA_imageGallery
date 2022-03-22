@@ -17,6 +17,7 @@ def index():
 
 @app.route('/login/', methods = ['POST'])
 def login():
+    session['email'] = request.form['email'] # this line newly added 12am; trying to repopulate user's entries in the fields upon validation fail
     data = {
         'email': request.form['email']
     }
@@ -29,7 +30,6 @@ def login():
         flash("Password incorrect.")
         return redirect('/')
     session['user_id'] = user.id
-    # flash("Your are now logged in")
     return redirect('/userTypeRouting/')
 
 @app.route('/register/', methods = ['POST'])

@@ -24,56 +24,104 @@
         {% endwith %}
     </div>
     <main>
-        <div class="row_01"> 
-            <div flex_col_01> 
-                <div class="container_01"> 
+        <div class="row_flex_center_top"> 
+            <div class="container_01"> 
+                <h2>Register</h2>
+                <table class="table_03">
                     <form action="/register/" method='post'>
-                        <section>
-                            <label for="email">Email: </label>
-                            <input type="email" name="email">
-                        </section>
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="email">Email: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="email" name="email" value = {{session.email}}>
+                            </td>
+                        </tr>
 
-                        <section>
-                            <label for="userName">userName: </label>
-                            <input type="text" name="userName">
-                        </section>
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="userName">userName: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="text" name="userName">
+                            </td>
+                        </tr>
 
-                        <section>
-                            <label for="firstName">First Name: </label>
-                            <input type="text" name="firstName">
-                        </section>
-                        <section>
-                            <label for="lastName">Last Name: </label>
-                            <input type="text" name='lastName'>
-                        </section>
-                        
-                        <section>
-                            <label for="password">Password: </label>
-                            <input type="password" name="password">
-                        </section>
-                        <section>
-                            <label for="confirm">Confirm Password: </label>
-                            <input type="password" name="confirm">
-                        </section>
-                        <button>Register + Login</button>
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="firstName">First Name: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="text" name="firstName">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="lastName">Last Name: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="text" name='lastName'>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="password">Password: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="password" name="password">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="confirm">Confirm Password: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="password" name="confirm">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" class="td_03_span2">
+                                <button>Register + Login</button>
+                            </td>
+                        </tr>
                     </form>
-                </div>
+                </table>
             </div>
-            <div flex_col_01> 
-                <div class="container_01"> 
+            
+            <div class="container_01"> 
+                <h2>Login</h2>
+                <table class="table_03">
                     <form action="/login/" method='post'>
-                    <section>
-                        <label for="email">Email: </label>
-                        <input type="text" name='email'>
-                    </section>
-                    <section>
-                        <label for="password">Password: </label>
-                        <input type="password" name='password'>
-                    </section>
-                    <button>Login</button>
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="email">Email: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="text" name='email'>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="td_03_right">
+                                <label for="password">Password: </label>
+                            </td>
+                            <td class="td_03">
+                                <input type="password" name='password'>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" class="td_03_span2">
+                                <button>Login</button>
+                            </td>
+                        </tr>
                     </form>
-                </div>
-            </div>  
+                </table>
+            </div>
         </div>
     </main>
     <footer>

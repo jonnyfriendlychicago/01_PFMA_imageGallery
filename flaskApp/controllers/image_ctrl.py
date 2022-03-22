@@ -6,7 +6,7 @@ from flaskApp.models import image_mod
 
 @app.route('/dashboard/')
 def dashboard(): 
-    if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
+    if 'user_id' not in session: 
         flash("Please login to access this site.")
         return redirect('/')
     data = {

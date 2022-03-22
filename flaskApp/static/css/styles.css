@@ -62,8 +62,17 @@ main {
     align-items: center;
 }
 
+.row_flex_center_top {
+    display: flex;
+    justify-content: center; 
+    align-items:flex-start; 
+}
+
 .container_01 {
-    width: 300px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 350px; 
     border: 5px solid darkgray; 
     border-radius: 5px;
     margin-left: 10px; 
@@ -93,11 +102,14 @@ main {
     background-color:  rgb(148, 146, 146);
 }
 
+/*---------------------------*/
+
 .table_02, .td_02, .td_02_bold, .th_02 {
-    border: none; 
+    border: 1px solid black; 
+    /* border: none;  */
     border-collapse: collapse;
 }
-/*---------------------------*/
+
 .td_02, .td_02_bold, .th_02 {
     padding: 5px; 
     vertical-align:top; 
@@ -115,9 +127,39 @@ main {
     width: 450px;
 }
 
+/*---------------------------*/
 
+.table_03, .td_03, .td_03_bold, .th_03 {
+    /* border: 1px solid black;  */
+    border: none; 
+    border-collapse: collapse;
+}
 
+.td_03, .td_03_bold, .th_03 {
+    padding: 3px; 
+    vertical-align:top; 
+}
 
+.th_03 {
+    background-color:  rgb(148, 146, 146);
+}
+
+.td_03_bold {
+    font-weight: bold;
+}
+
+.td_03, .td_03_right {
+    width: 150px;
+}
+
+.td_03_span2 {
+    text-align: center;
+
+}
+
+.td_03_right {
+    text-align: right;
+}
 
 
 
