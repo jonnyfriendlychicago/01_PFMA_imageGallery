@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Recipes Dashboard</title>
+</head>
+<body>
+    <header>
+        <div class="header_content"> 
+            <div class="header_content_vert_left"> 
+                <h1>Dojogram</h1>
+                <h2>Feel the love.</h2>
+            </div>
+            <div class="header_content_vert_right"> 
+                <h2>Welcome, {{dsp_get_oneUser.firstName}}</h2>
+                <h4>(UserID: {{dsp_get_oneUser.id}})</h4>
+                <a href="/logout/">Logout</a>
+            </div>
+        </div>
+    </header>
+    <div class="messages">
+        {% with messages = get_flashed_messages() %}
+            {%if messages %}
+                {% for m in messages %}
+                    <h5>{{m}}</h5>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <main>
+        <div class="row_left"> 
+            <h1>Dashboard(rename this later)</h1>  
+            <table class="table_01" >
+                <tr>
+                    <th class="th_01">Title</th>
+                    <th class="th_01">Posted</th>
+                    <th class="th_01">Actions</th>
+                </tr>
+
+            </table>
+            <button> <a href="/image/add/">Add Recipe</a></button>
+        </div>
+    </main>
+    
+
+    
+    <footer>
+
+    </footer>
+</body>
+</html>
