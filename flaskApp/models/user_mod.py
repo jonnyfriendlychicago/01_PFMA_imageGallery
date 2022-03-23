@@ -19,36 +19,36 @@ class User_cls:
         self.createdAt = data['createdAt']
         self.updatedAt = data['updatedAt']
 
-        self.userImagesList = []
+        # self.userImagesList = []
 
     # below is a cheeky little function to save some typing.  Think about how functions like this can be exploited in other ways. 
     def fullName(self):
         return (f"{self.firstName} {self.lastName}")
 
     @staticmethod
-    def validate(user):
+    def validateRegistration(registrationForm):
         isValid = True
         q = 'select * from user where email = %(email)s;'
-        result = connectToMySQL(User_cls.db).query_db(q, user)
-        if len(result) >= 1: # somewhat clumsy way (??) of saying, if one or more results!
+        result = connectToMySQL(User_cls.db).query_db(q, registrationForm)
+        if len(result) >= 1: 
             isValid = False
             flash("Email already in use.")
         
         q_two = 'select * from user where userName = %(userName)s;'
-        result_two = connectToMySQL(User_cls.db).query_db(q_two, user)
-        if len(result_two) >= 1: # somewhat clumsy way (??) of saying, if one or more results!
+        result_two = connectToMySQL(User_cls.db).query_db(q_two, registrationForm)
+        if len(result_two) >= 1: 
             isValid = False
             flash("Username already in use.")
 
-        if not EMAIL_REGEX.match(user['email']): 
+        if not EMAIL_REGEX.match(registrationForm['email']): 
             isValid = False
-            flash("i=Invalid email address.")
-        if len(user['firstName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+            flash("Invalid email address.")
+        if len(registrationForm['firstName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
             isValid = False
-            flash("First name cannot be blank.")
-        if len(user['lastName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+            flash("First name required.")
+        if len(registrationForm['lastName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
             isValid = False
-            flash("Last name cannot be blank.")
+            flash("Last name required.")
         # if len(user['password']) < 8:
         #     isValid = False
         #     flash("Password must be at least 8 characters, ")
@@ -57,6 +57,14 @@ class User_cls:
         #     flash("Password entries must match.")
         return  isValid
 
+    @classmethod
+    def getSessionUser(cls, data):
+        q = 'select * from user where id = %(session_user_id)s;'
+        result = connectToMySQL(cls.db).query_db(q, data)
+        if len(result) <1:
+            return False
+        return cls(result[0])
+    
     @classmethod
     def get_oneUser(cls, data):
         q = 'select * from user where id = %(user_id)s;'
@@ -90,10 +98,10 @@ class User_cls:
         q = 'insert into user (userName, firstName, lastName, email, password, createdAt, updatedAt) values (%(userName)s,  %(firstName)s, %(lastName)s, %(email)s, %(password)s, NOW(), NOW() );'
         return connectToMySQL(cls.db).query_db(q, data)
 
-    # need to discuss below and why not make this a working feature. 
     @classmethod
     def updateUser (cls, data):
-        pass
+        q = "update user set userName = %(userName)s, email = %(email)s, firstName = %(firstName)s, lastName = %(lastName)s where id = %(user_id)s;" 
+        return connectToMySQL(cls.db).query_db(q, data)
 
     @classmethod
     def updateUserEmpType (cls, data):
@@ -106,7 +114,7 @@ class User_cls:
         pass
 
     @classmethod
-    def getUserImage(cls, data):
+    def getUserImageXXX(cls, data):
         q = 'select * from user left join image on user.id = image.user_id where user.id = %(user_id)s;'
         result = connectToMySQL(cls.db).query_db(q, data)
         userImageObj = cls (result[0])

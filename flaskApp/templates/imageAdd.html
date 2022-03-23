@@ -9,19 +9,8 @@
 </head>
 <body>
     <header>
-        <div class="header_content"> 
-            <div class="header_content_vert_left"> 
-                <h1>Recipes</h1>
-                <h2>Your guide to kitchen sanity. </h2>
-            </div>
-            <div class="header_content_vert_right"> 
-                <h2>Welcome, {{dsp_get_oneUser.firstName}}</h2>
-                <h4>(UserID: {{dsp_get_oneUser.id}})</h4>
-                <a href="/logout/">Logout</a>
-            </div>
-        </div>
+        {% block menu %} {% include 'header.html' %} {% endblock menu %}
     </header>
-
     <div class="messages">
         {% with messages = get_flashed_messages() %}
             {%if messages %}
@@ -33,32 +22,42 @@
     </div>
     <main>
         <div class="row_left"> 
-            <h1>Add a recipe</h1>
+            <h1>Add an image</h1>
             <table class="table_02">
-                <form action="/recipe/create/" method="post" > 
-                    <tr>
+                <form action="/image/create/{{dsp_getSessionUser.id}}/" method="post" > 
+
+                    <!-- <tr>
                         <td colspan="2" class="th_02">
-                            <input type="text" name="recipeName" >
-                            <label for="recipeName">(Recipe Name)</label>
+                            <input type="text" name="imageTitle" >
+                            <label for="imageTitle">(Image Title)</label>
+                        </td>
+                    </tr>
+                    <tr> -->
+                        <td class="td_02_bold">
+                            <label for="imageTitle">Image title:</label>
+                        </td>
+                        <td class="td_02">
+                            <input type="text" name="imageTitle" >
+                        </td>
+                    </tr>   
+
+                    <tr>
+                        <td class="td_02_bold">
+                            <label for="imageInfo">imageInfo:</label>
+                        </td>
+                        <td class="td_02">
+                            <textarea name="imageInfo" rows="10" cols="60"></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td class="td_02_bold">
-                            <label for="recipeDesc">Description:</label>
+                            <label for="filePath">Filepath:</label>
                         </td>
                         <td class="td_02">
-                            <textarea name="recipeDesc" rows="10" cols="60"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="td_02_bold">
-                            <label for="recipeInst">Instructions:</label>
-                        </td>
-                        <td class="td_02">
-                            <textarea name="recipeInst" rows="10" cols="60"></textarea>
+                            <input type="text" name="filePath" >
                         </td>
                     </tr>    
-                    <tr>
+                    <!-- <tr>
                         <td class="td_02_bold">
                             <p>Under 30 mins? </p>
                         </td>
@@ -76,15 +75,15 @@
                         <td class="td_02">
                             <input type="date" id="dateMade" name="dateMade" >
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td colspan="2" class="td_02">
-                            <button>Save Recipe</button>
+                            <button>Save Image</button>
                         </td>
                     </tr>
                 </form>
             </table>
-            <button> <a href="/dashboard/">Cancel New Recipe</a></button>
+            <button> <a href="/profile/{{dsp_getSessionUser.id}}/">Cancel New Image</a></button>
         </div>
     </main>
 </body>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Xxx</title>
+</head>
+<body>
+    <header>
+        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+    </header>
+    <div class="messages">
+        {% with messages = get_flashed_messages() %}
+            {%if messages %}
+                {% for m in messages %}
+                    <h5>{{m}}</h5>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <main>
+        <div class="row_left"> 
+            <h1>ProfileEditScreen for {{dsp_get_oneUser.userName}}</h1>  
+
+            <table class="table_03">
+                <form action="/profile/{{dsp_get_oneUser.id}}/update/" method="post" > 
+                    <tr>
+                        <td class="td_03_right">
+                            <label for="email">Email:</label>
+                        </td>
+                        <td class="td_03">
+                            <input type="text" name="email" value="{{dsp_get_oneUser.email}}">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="td_03_right">
+                            <label for="userName">userName:</label>
+                        </td>
+                        <td class="td_03">
+                            <input type="text" name="userName" value="{{dsp_get_oneUser.userName}}">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="td_03_right">
+                            <label for="firstName">First Name:</label>
+                        </td>
+                        <td class="td_03">
+                            <input type="text" name="firstName" value="{{dsp_get_oneUser.firstName}}">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="td_03_right">
+                            <label for="lastName">Last Name:</label>
+                        </td>
+                        <td class="td_03">
+                            <input type="text" name="lastName" value="{{dsp_get_oneUser.lastName}}">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="td_03_span2">
+                            <button>Update Profile</a></button>
+                        </td>
+                    </tr>
+                </form>
+            </table>
+
+                <table class="table_01" >
+                    <tr>
+                        <th class="th_01">Title</th>
+                        <th class="th_01">Posted</th>
+                        <th class="th_01">Actions</th>
+                    </tr>
+
+                </table>
+            <!-- <button> <a href="/image/add/">Add Image</a></button> -->
+        </div>
+    </main>
+    
+
+    
+    <footer>
+
+    </footer>
+</body>
+</html>

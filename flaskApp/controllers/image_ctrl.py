@@ -4,43 +4,32 @@ from flask import Flask, render_template, redirect, session, request, flash
 from flaskApp.models import user_mod 
 from flaskApp.models import image_mod
 
-@app.route('/dashboard/')
-def dashboard(): 
-    if 'user_id' not in session: 
-        flash("Please login to access this site.")
-        return redirect('/')
-    data = {
-        "user_id": session['user_id']
-    }
-    return render_template(
-        'dashboard.html'
-        , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
-        , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
-    )
-
 @app.route('/image/add/')
 def addImage():
-    if 'user_id' not in session: 
+    if 'session_user_id' not in session: 
         flash("You must be logged in to access this site.")
         return redirect('/')
     data = {
-        "user_id": session['user_id']
+        'session_user_id': session['session_user_id']
+        # , 'user_id': user_id
     }
     return render_template(
-        'imageAdd.html' , 
-        dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
+        'imageAdd.html' 
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # this is what always *minimally* populates the header section  correctly
+        # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
     )
 
-@app.route('/image/create/', methods = ['POST'])
-def createImage():
+@app.route('/image/create/<int:returnToUserId>/', methods = ['POST'])
+def createImage(returnToUserId):
     data = {
-        'user_id': session['user_id']
+        'user_id': session['session_user_id']
         , 'imageTitle': request.form['imageTitle']
         , 'imageInfo': request.form['imageInfo']        
         , 'filePath': request.form['filePath']
+        # , 'returnToUserId' : returnToUserId
     }
-    image_mod.Image_cls.saveNew(data)
-    return redirect('/dashboard/')
+    image_mod.Image_cls.save(data)
+    return redirect(f'/profile/{returnToUserId}/')
 
 
 @app.route('/image/<int:image_id>/')

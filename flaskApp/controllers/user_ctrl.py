@@ -3,38 +3,22 @@ from flask import Flask, render_template, redirect, session, request, flash
 
 from flask_bcrypt import Bcrypt
 
-from flaskApp.models.user_mod import User_cls
+# from flaskApp.models.user_mod import User_cls
+from flaskApp.models import user_mod
+from flaskApp.models import image_mod
 
 bcrypt = Bcrypt(app)
 
 @app.route('/')
 def index():
-    if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
+    if 'session_user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
         return render_template('index.html')
     else:     
-        # flash("You are already logged in.  You have been redirected to your home page.")
         return redirect('/userTypeRouting/') 
-
-@app.route('/login/', methods = ['POST'])
-def login():
-    session['email'] = request.form['email'] # this line newly added 12am; trying to repopulate user's entries in the fields upon validation fail
-    data = {
-        'email': request.form['email']
-    }
-    user = User_cls.get_userEmail(data) # checks if this email in the DB
-
-    if not user: 
-        flash("No account exists with that email address.")
-        return redirect('/')
-    if not bcrypt.check_password_hash(user.password, request.form['password']):
-        flash("Password incorrect.")
-        return redirect('/')
-    session['user_id'] = user.id
-    return redirect('/userTypeRouting/')
 
 @app.route('/register/', methods = ['POST'])
 def register():
-    isValid = User_cls.validate(request.form)
+    isValid = user_mod.User_cls.validateRegistration(request.form)
     if not isValid:
         return redirect('/') # don't worry about msgs, b/c that's already handled with the flash on that classMethod
     newUser = {
@@ -44,23 +28,38 @@ def register():
         'lastName': request.form['lastName'], 
         'password': bcrypt.generate_password_hash(request.form['password'])
     }
-    user_id = User_cls.saveUser(newUser)
-    # print("variable 'user_id' in the /register/ route:")
-    # print(user_id)
-    if not user_id: 
+    user_id = user_mod.User_cls.saveUser(newUser)
+    if not user_id: # this if basically means: someone, that save just didn't work, so we are dropping the save/create process and returning you to login. 
         flash("Our apologies.  Our system seems to be experiencing technical issues.  Please call our office at 123.456.7890 for further assistance.")
         return redirect('/')
-    session['user_id'] = user_id
+    # session['user_id'] = user_id
+    session['session_user_id'] = user_id # saveUser classmethod returns the id of the newly created user
     flash("New Account created.")
+    return redirect('/userTypeRouting/')
+
+@app.route('/login/', methods = ['POST'])
+def login():
+    data = {
+        'email': request.form['email']
+    }
+    user = user_mod.User_cls.get_userEmail(data) # checks if this email in the DB; get_userEmail class method returns the entire class; that's why the ".id" a few lines down is required.
+    if not user: 
+        flash("No account exists with that email address.")
+        return redirect('/')
+    if not bcrypt.check_password_hash(user.password, request.form['password']):
+        flash("Password incorrect.")
+        return redirect('/')
+    session['session_user_id'] = user.id # this needs to exist as such because what's being retuned by get_userEmail is a class, not a single id value
+    # session['session_user_id'] = user
     return redirect('/userTypeRouting/')
 
 @app.route('/userTypeRouting/')
 def userTypeRouting():
-    if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
+    if 'session_user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
         flash("Please login to access this site.")
         return redirect('/')
     data = {
-        "user_id": session['user_id']
+        "session_user_id": session['session_user_id']
     }
     return redirect('/dashboard/')
     # creating code to maker certain users an employee upon reaching this page.
@@ -91,23 +90,6 @@ def userTypeRouting():
     #         , display_get_oneUser = User_cls.get_oneUser(data)
     #         # , display_get_booking = get_booking
     #     )
-
-""" moved dashbord below to image_ctrl.py
-@app.route('/dashboard/')
-def dashboard(): 
-    if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
-        flash("Please login to access this site.")
-        return redirect('/')
-    data = {
-        "user_id": session['user_id']
-    }
-    return render_template(
-        'dashboard.html'
-        , dsp_get_oneUser = User_cls.get_oneUser(data)
-        # , display_get_booking = get_booking
-        , dsp_get_allRecipe = recipe_mod.Recipe_cls.get_allRecipe()
-    )
-"""
 
 @app.route('/logout/')
 def logout():
@@ -141,3 +123,72 @@ def logout():
 #     User_cls.updateUserEmpType(data)
 #     flash("User updated to employee level")
 #     return redirect('/users/')
+
+@app.route('/dashboard/')
+def dashboard(): 
+    if 'session_user_id' not in session: 
+        flash("Please login to access this site.")
+        return redirect('/')
+    data = {
+        "session_user_id": session['session_user_id']
+    }
+    return render_template(
+        'dashboard.html'
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getAllImageAllUser = image_mod.Image_cls.getAllImageAllUser()
+    )
+
+@app.route('/profile/<int:user_id>/')
+def profile(user_id): 
+    if 'session_user_id' not in session: 
+        flash("Please login to access this site.")
+        return redirect('/')
+    data = {
+        "session_user_id": session['session_user_id']
+        , "user_id": user_id
+    }
+    return render_template(
+        'profile.html'
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
+        , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
+        # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
+        , getAllImageOneUser = image_mod.Image_cls.getAllImageOneUser(data)
+    )
+
+@app.route('/profile/<int:user_id>/edit/')
+def profileEdit(user_id): 
+    if 'session_user_id' not in session: 
+        flash("You must be logged in to access this site.")
+        return redirect('/')
+    data = {
+        # "user_id": session['user_id']
+        'session_user_id': session['session_user_id']
+        , 'user_id': user_id
+        # , 'userName': request.form['userName']
+        # , 'email': request.form['email']
+        # , 'firstName': request.form['firstName']
+        # , 'lastName': request.form['lastName']
+    }
+    get_oneUser = user_mod.User_cls.get_oneUser(data)
+    if session['session_user_id'] != get_oneUser.id:
+        flash("You can only edit your own profile.")
+        return redirect(f'/profile/{user_id}/')
+    return render_template(
+        'profileEdit.html'
+        # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
+        , dsp_get_oneUser = get_oneUser
+        # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
+    )
+
+@app.route('/profile/<int:user_id>/update/', methods =['POST'])
+def profileUpdate(user_id):
+    data = {
+        'user_id': user_id
+        , 'userName': request.form['userName']
+        , 'email': request.form['email']
+        , 'firstName': request.form['firstName']
+        , 'lastName': request.form['lastName'] 
+    }
+    updateProfile = user_mod.User_cls.updateUser(data)
+    return redirect(f'/profile/{user_id}/')

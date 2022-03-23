@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Recipes Dashboard</title>
+</head>
+<body>
+    <header>
+        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+    </header>
+    <div class="messages">
+        {% with messages = get_flashed_messages() %}
+            {%if messages %}
+                {% for m in messages %}
+                    <h5>{{m}}</h5>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <main>
+        <div class="row_left"> 
+            <h1>
+            {%if dsp_getSessionUser.id ==  dsp_get_oneUser.id %}
+                My Profile
+            {% else %}
+            {{dsp_get_oneUser.userName}}
+            {% endif %}
+            </h1>  
+
+            <table class="table_03">
+                <tr>
+                    <td class="td_03_right">
+                        Email:
+                    </td>
+                    <td class="td_03">
+                        {{dsp_get_oneUser.email}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="td_03_right">
+                        userName:
+                    </td>
+                    <td class="td_03">
+                        {{dsp_get_oneUser.userName}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="td_03_right">
+                        First Name:
+                    </td>
+                    <td class="td_03">
+                        {{dsp_get_oneUser.firstName}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="td_03_right">
+                        Last Name:
+                    </td>
+                    <td class="td_03">
+                        {{dsp_get_oneUser.lastName}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="td_03_span2">    
+                        {%if dsp_getSessionUser.id ==  dsp_get_oneUser.id %}
+                            <button> <a href="/profile/{{dsp_get_oneUser.id}}/edit/">Edit Profile</a></button>
+                        {% else %}
+                            <p>Only the user can edit his own profile.</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <h2>My Dojograms</h2>
+            <table class="table_01" >
+                <tr>
+                    <th class="th_01">Image Title</th>
+                    <th class="th_01">Image Info</th>
+                    <th class="th_01">Created</th>
+                </tr>
+                
+                {% for rec in getAllImageOneUser %}
+                <tr>
+                    <td class="td_01">
+                        {{rec.imageTitle}}
+                    </td>
+                    <td class="td_01">
+                        {{rec.imageTitle}}
+                    </td>
+                    <td class="td_01">
+                        {% if rec.createdAt %}
+                            {{rec.createdAt.strftime('%Y-%m-%d')}}
+                        {% else %}
+                            No created, buddy!!
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            <button> <a href='/image/add/'>Add Image</a></button>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>
