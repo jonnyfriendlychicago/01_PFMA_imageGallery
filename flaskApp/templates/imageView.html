@@ -91,25 +91,21 @@
                                     comment text
                                 </td>
                             </tr>
+                            {% for rec in getOneImageAllInterAllUser %}
                             <tr>
+                                <td class="td_01"> 
+                                    {{rec.createdByUser.userName}} 
+                                </td>    
                                 <td class="td_01">
-                                    Example UserName
-                                </td>
-                                <td class="td_01">
-                                    Example Comment
+                                    {{rec.InteractionSolutionVar.comment}}
                                 </td>
                             </tr>
-                            
+                            {% endfor %}
                         </table>
                     </td>
                 </tr>
             </table>
             {% endfor %}
-
-
-            getOneImageAllInterAllUser
-
-
             
         </div>
         <div class="row_left"> 

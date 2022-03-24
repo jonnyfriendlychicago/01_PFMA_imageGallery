@@ -150,7 +150,7 @@ class Image_cls:
 # working on interations display here!
     @classmethod
     def getOneImageAllInterAllUser(cls, data):
-        q = "select * from image left join interaction on image.id = interaction.image_id left join user on interaction.user_id = user.id where image.id = %(image_id)s order by interaction.createdAt;"
+        q = "select * from image left join interaction on image.id = interaction.image_id left join user on interaction.user_id = user.id where image.id = %(image_id)s order by interaction.createdAt desc;"
         result = connectToMySQL(cls.db).query_db(q, data)
         allImageAllUserList = []
         for row in result:
