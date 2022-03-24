@@ -3,6 +3,7 @@ from flaskApp import app
 from flask import Flask, render_template, redirect, session, request, flash
 from flaskApp.models import user_mod 
 from flaskApp.models import image_mod
+from flaskApp.models import interaction_mod
 
 @app.route('/image/add/')
 def addImage():
@@ -34,17 +35,19 @@ def createImage(returnToUserId):
 
 @app.route('/image/<int:image_id>/')
 def viewImage(image_id): 
-    if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
+    if 'session_user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
         flash("You must be logged in to access this site.")
         return redirect('/')
     data = {
-        "user_id": session['user_id']
+        "session_user_id": session['session_user_id']
         , 'image_id': image_id
     }
     return render_template(
         'imageView.html'
-        , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
-        , dsp_get_oneImage = image_mod.Image_cls.getOne(data)   
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getOneImageOneUser = image_mod.Image_cls.getOneImageOneUser(data)
+        # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
+        # , getOneImage = image_mod.Image_cls.getOneImage(data)   
     )
 
 

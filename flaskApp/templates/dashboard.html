@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Recipes Dashboard</title>
+    <title>Dojogram Dashboard</title>
 </head>
 <body>
     <header>
@@ -26,24 +26,28 @@
             <h1>Dashboard</h1>
             
             <h2>Dojogram Feed</h2>
+            <button> <a href="/image/add/">Add Image</a></button>
+
+            <!-- first very simple table -->
             <table class="table_01" >
                 <tr>
+                    <th class="th_01">Contributor</th>
                     <th class="th_01">Image Title</th>
-                    <th class="th_01">Image Info</th>
+                    <th class="th_01">File Path</th>
                     <th class="th_01">Created</th>
                 </tr>
                 
                 {% for rec in getAllImageAllUser %}
                 <tr>
                     <td class="td_01"> 
-                    {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
+                        {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
                     </td>    
                     
                     <td class="td_01">
                         {{rec.imageTitle}}
                     </td>
                     <td class="td_01">
-                        {{rec.imageTitle}}
+                        {{rec.filePath}}
                     </td>
                     <td class="td_01">
                         {% if rec.createdAt %}
@@ -54,9 +58,98 @@
                     </td>
                 </tr>
                 {% endfor %}
-
             </table>
-            <button> <a href="/image/add/">Add Image</a></button>
+
+            <!-- above is row for each record; below is TABLE for each record -->
+
+            {% for rec in getAllImageAllUser %}
+
+            <table class="table_01" >
+                <tr> 
+                    <td colspan="2" class="td_01">
+                        <img src="{{rec.filePath}}" alt="some image" width="400">    
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="td_01"> 
+                        Contributor:
+                    </td>
+                    <td class="td_01"> 
+                        {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
+                    </td>    
+                </tr>
+
+                <tr>
+                    <td class="td_01"> 
+                        Image Title:
+                    </td>
+                    <td class="td_01"> 
+                        {{rec.imageTitle}} 
+                    </td>    
+                </tr>
+
+                <tr>
+                    <td class="td_01"> 
+                        File path:
+                    </td>
+                    <td class="td_01"> 
+                        {{rec.filePath}}
+                    </td>    
+                </tr>
+
+                <tr>
+                    <td class="td_01"> 
+                        Created:
+                    </td>
+                    <td class="td_01"> 
+                        {% if rec.createdAt %}
+                            {{rec.createdAt.strftime('%Y-%m-%d')}}
+                        {% else %}
+                            No created, buddy!!
+                        {% endif %}
+                    </td>    
+                </tr>
+                <tr> 
+                    <td colspan="2" class="td_01">
+                        <button> <a href="/image/{{rec.id}}/">View/Contribute to this Dojogram</a></button>
+                        
+                    </td>
+                </tr>
+                <tr> 
+                    <td colspan="2" class="td_01">
+                        Interactions: (might be pie in sky for now) 
+                    </td>
+                </tr>
+
+                <tr> 
+                    <td colspan="2" class="td_01">
+                        <table class="table_01" >
+                            <tr>
+                                <td class="td_01">
+                                    comment creator:
+                                </td>
+                                
+                                <td class="td_01">
+                                    comment text
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td_01">
+                                    Example UserName
+                                </td>
+                                <td class="td_01">
+                                    Example Comment
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+
+            
         </div>
     </main>
     

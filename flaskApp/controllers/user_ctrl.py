@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 # from flaskApp.models.user_mod import User_cls
 from flaskApp.models import user_mod
 from flaskApp.models import image_mod
+from flaskApp.models import interaction_mod
 
 bcrypt = Bcrypt(app)
 
