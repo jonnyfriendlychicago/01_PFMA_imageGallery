@@ -1,9 +1,31 @@
-from email.mime import image
+# from email.mime import image
 from flaskApp import app
 from flask import Flask, render_template, redirect, session, request, flash
 from flaskApp.models import user_mod 
 from flaskApp.models import image_mod
 from flaskApp.models import interaction_mod
+
+
+
+
+@app.route('/interaction/create/<int:image_id>/', methods = ['POST'])
+def createInteraction(image_id): 
+    if 'session_user_id' not in session: 
+        flash("You must be logged in to access this site.")
+        return redirect('/')
+    data = {
+        'session_user_id': session['session_user_id']
+        , 'image_id' : image_id
+        , 'comment': request.form['comment']
+    }
+    interaction_mod.Interaction_cls.saveInteraction(data)
+    return redirect(f'/image/{image_id}/')
+
+
+
+
+"""
+
 
 @app.route('/image/add/')
 def addImage():
@@ -47,7 +69,7 @@ def viewImage(image_id):
         , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
         , getOneImageOneUser = image_mod.Image_cls.getOneImageOneUser(data)
         # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
-        , getOneImage = image_mod.Image_cls.getOneImage(data)   
+        # , getOneImage = image_mod.Image_cls.getOneImage(data)   
     )
 
 
@@ -102,3 +124,4 @@ def deleteImage(image_id):
         flash("Recipe deleted.  POOF!  GONE!")
         return redirect ('/dashboard/')
 
+"""

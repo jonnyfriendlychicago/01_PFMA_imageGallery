@@ -14,7 +14,7 @@ class Interaction_cls:
         self.image_id = data['image_id']
 
     @classmethod
-    def save(cls, data):
-        q = "insert into interaction (comment, user_id, image_id) values (%(comment)s, %(user_id)s, %(image_id)s; " 
+    def saveInteraction(cls, data):
+        q = "insert into interaction (comment, user_id, image_id, createdAt, updatedAt) values (%(comment)s, %(session_user_id)s, %(image_id)s, NOW(), NOW() ); " 
         return connectToMySQL(cls.db).query_db(q, data)
     

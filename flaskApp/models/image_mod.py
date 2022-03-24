@@ -68,7 +68,7 @@ class Image_cls:
 
         return allImageAllUserList
     
-    #below is editted version of above; goal: just ONE image and it's user data
+    #below is editted version of above; goal: just ONE image and it's user data.  it works, but could make this a lot simpler with refactored approach; get back to that later. 
     @classmethod
     def getOneImageOneUser(cls, data):
         q = 'select * from image left join user on image.user_id = user.id where image.id = %(image_id)s;'
@@ -122,7 +122,7 @@ class Image_cls:
 
     @classmethod
     def getOneImage(cls, data):
-        q = "select * from image where id = %(id)s;"
+        q = "select * from image where id = %(image_id)s;"
         result = connectToMySQL(cls.db).query_db(q, data)
         if len(result) <1:
             return False    

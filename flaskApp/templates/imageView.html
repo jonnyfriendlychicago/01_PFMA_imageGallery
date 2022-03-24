@@ -113,6 +113,27 @@
 
             
         </div>
+        <div class="row_left"> 
+            <h1>Comment on this Dojogram</h1>
+            <table class="table_02">
+                <form action="/interaction/create/{{getOneImage.id}}/" method="post" > 
+                    <tr>
+                        <td class="td_02_bold">
+                            <label for="comment">Comment:</label>
+                        </td>
+                        <td class="td_02">
+                            <textarea name="comment" rows="10" cols="60"></textarea>
+                        </td>
+                    </tr>    
+                    
+                    <tr>
+                        <td colspan="2" class="td_02">
+                            <button>Save Interction!</button>
+                        </td>
+                    </tr>
+                </form>
+            </table>
+        </div>
     </main>
     
 
