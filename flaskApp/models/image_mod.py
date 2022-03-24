@@ -130,7 +130,6 @@ class Image_cls:
             return False    
         return cls(result[0])
 
-
     @classmethod
     def save(cls, data):
         q = "insert into image (imageTitle, imageInfo, filePath, user_id, createdAt, updatedAt) values (%(imageTitle)s, %(imageInfo)s, %(filePath)s, %(user_id)s, NOW(), NOW() ); " 
@@ -142,11 +141,10 @@ class Image_cls:
         return connectToMySQL(cls.db).query_db(q, data)
     
     @classmethod
-    def delete(cls, data):
-        q = "delete from image where id = %(id)s;"
+    def deleteImage(cls, data):
+        q = "delete from image where id = %(image_id)s;"
         return connectToMySQL(cls.db).query_db(q, data)
 
-            
 # working on interations display here!
     @classmethod
     def getOneImageAllInterAllUser(cls, data):

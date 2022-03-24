@@ -18,3 +18,15 @@ class Interaction_cls:
         q = "insert into interaction (comment, user_id, image_id, createdAt, updatedAt) values (%(comment)s, %(session_user_id)s, %(image_id)s, NOW(), NOW() ); " 
         return connectToMySQL(cls.db).query_db(q, data)
     
+    @classmethod
+    def deleteInteraction(cls, data):
+        q = "delete from interaction where id = %(interaction_id)s;"
+        return connectToMySQL(cls.db).query_db(q, data)
+
+    @classmethod
+    def getOneInteraction(cls, data):
+        q = "select * from interaction where id = %(interaction_id)s;"
+        result = connectToMySQL(cls.db).query_db(q, data)
+        if len(result) <1:
+            return False
+        return cls(result[0])

@@ -24,6 +24,11 @@
     <main>
         <div class="row_left"> 
             <h1>Single Image View</h1>
+            <button> <a href="/dashboard/">Dashboard</a></button>
+            {%if getOneImage.user_id ==  dsp_getSessionUser.id %}
+                <button> <a href="/image/{{getOneImage.id}}/delete/">Delete Image (and its interactions)</a></button>
+            {% else %}
+            {% endif %}
             
             {% for rec in getOneImageOneUser %}
             <table class="table_01" >
@@ -37,7 +42,7 @@
                         Contributor:
                     </td>
                     <td class="td_01"> 
-                        {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
+                        <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a> ({{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}}) 
                     </td>    
                 </tr>
                 <tr>
@@ -46,6 +51,19 @@
                     </td>
                     <td class="td_01"> 
                         {{rec.imageTitle}} 
+                    </td>    
+                </tr>
+                <tr>
+                    <td class="td_01"> 
+                        Image Info:
+                    </td>
+                    <td class="td_01"> 
+                        <p>
+                            {% set arbitraryVariable = rec.imageInfo.split("\r\n") %} 
+                            {% for row in arbitraryVariable: %}
+                                {{row}} <br>
+                            {% endfor %}
+                        </p>
                     </td>    
                 </tr>
                 <tr>
@@ -68,42 +86,46 @@
                         {% endif %}
                     </td>    
                 </tr>
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        View/Contribute to this Dojogram
-                    </td>
-                </tr>
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        Interactions: gonna try to make it happen on this page!
-                    </td>
-                </tr>
 
+                {% if rec in getOneImageAllInterAllUser == None %}
+                {% else %}
                 <tr> 
                     <td colspan="2" class="td_01">
+                        
                         <table class="table_01" >
                             <tr>
-                                <td class="td_01">
-                                    comment creator:
-                                </td>
-                                
-                                <td class="td_01">
-                                    comment text
-                                </td>
+                                <td class="td_01">UserName</td>
+                                <td class="td_01">comment</td>
+                                <td class="td_01">PostedAt</td>
+                                <td class="td_01">Actions</td>
                             </tr>
                             {% for rec in getOneImageAllInterAllUser %}
                             <tr>
                                 <td class="td_01"> 
-                                    {{rec.createdByUser.userName}} 
+                                    <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a>
                                 </td>    
                                 <td class="td_01">
                                     {{rec.InteractionSolutionVar.comment}}
+                                </td>
+                                <td class="td_01">
+                                    {% if rec.InteractionSolutionVar.createdAt %}
+                                        {{rec.InteractionSolutionVar.createdAt.strftime('%Y-%b-%d %-I:%M %p')}}
+                                    {% else %}
+                                        No date here
+                                    {% endif %}
+                                </td>
+                                <td class="td_01">
+                                    {%if rec.InteractionSolutionVar.user_id ==  dsp_getSessionUser.id %}
+                                        <a href="/image/{{rec.id}}/interaction/{{rec.InteractionSolutionVar.id}}/delete/">delete</a>
+                                    {% else %}
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
                         </table>
                     </td>
                 </tr>
+                {% endif %}
             </table>
             {% endfor %}
             
@@ -111,7 +133,7 @@
         <div class="row_left"> 
             <h1>Comment on this Dojogram</h1>
             <table class="table_02">
-                <form action="/interaction/create/{{getOneImage.id}}/" method="post" > 
+                <form action="/image/{{getOneImage.id}}/interaction/create/" method="post" > 
                     <tr>
                         <td class="td_02_bold">
                             <label for="comment">Comment:</label>
@@ -123,7 +145,7 @@
                     
                     <tr>
                         <td colspan="2" class="td_02">
-                            <button>Save Interction!</button>
+                            <button>Save Comment</button>
                         </td>
                     </tr>
                 </form>

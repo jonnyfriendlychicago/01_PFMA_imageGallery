@@ -52,17 +52,16 @@ def viewImage(image_id):
     )
 
 
-@app.route('/recipe/<int:image_id>/edit/')
+@app.route('/image/<int:image_id>/edit/')
 def editImage(image_id): 
-    if 'user_id' not in session: 
+    if 'session_user_id' not in session: 
         flash("You must be logged in to access this site.")
         return redirect('/')
     data = {
-        'user_id': session['user_id']
+        'session_user_id': session['session_user_id']
         , 'image_id': image_id
         , 'imageTitle': request.form['imageTitle']
-        , 'imageInfo': request.form['imageInfo']
-        
+        , 'imageInfo': request.form['imageInfo'] 
     }
     get_oneImage = image_mod.Image_cls.getOne(data)
     if session['user_id'] != get_oneImage.user_id:
@@ -75,7 +74,7 @@ def editImage(image_id):
         , dsp_get_oneImage = get_oneImage
     )
 
-@app.route('/recipe/<int:image_id>/update/', methods=['POST'])
+@app.route('/image/<int:image_id>/update/', methods=['POST'])
 def updateImage(image_id): 
     data = {
         'user_id': session['user_id']
@@ -85,21 +84,21 @@ def updateImage(image_id):
     updateImage = image_mod.Image_cls.update(data)
     return redirect(f'/image/{image_id}/')
 
-@app.route('/recipe/<int:image_id>/delete/')
+@app.route('/image/<int:image_id>/delete/')
 def deleteImage(image_id): 
-    if 'user_id' not in session: 
+    if 'session_user_id' not in session: 
         flash("You must be logged in to access this site.")
         return redirect('/')
     data = {
-        'user_id': session['user_id']
+        'session_user_id': session['session_user_id']
         , 'image_id': image_id
     }
-    get_oneImage = image_mod.Image_cls.get_one(data)
-    if session['user_id'] != get_oneImage.user_id:
+    imageRecord = image_mod.Image_cls.getOneImage(data)
+    if session['session_user_id'] != imageRecord.user_id:
         flash("You must be the creator of an image to delete it.")
-        return redirect('/dashboard/')
+        return redirect('/image/<int:image_id>//')
     else: 
-        image_mod.Image_cls.delete(data)
-        flash("Recipe deleted.  POOF!  GONE!")
+        image_mod.Image_cls.deleteImage(data)
+        flash("Image deleted.  POOF!  GONE!  And all comments/interactions got whacked, too.")
         return redirect ('/dashboard/')
 

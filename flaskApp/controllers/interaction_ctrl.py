@@ -6,9 +6,7 @@ from flaskApp.models import image_mod
 from flaskApp.models import interaction_mod
 
 
-
-
-@app.route('/interaction/create/<int:image_id>/', methods = ['POST'])
+@app.route('/image/<int:image_id>/interaction/create/', methods = ['POST'])
 def createInteraction(image_id): 
     if 'session_user_id' not in session: 
         flash("You must be logged in to access this site.")
@@ -20,6 +18,25 @@ def createInteraction(image_id):
     }
     interaction_mod.Interaction_cls.saveInteraction(data)
     return redirect(f'/image/{image_id}/')
+
+@app.route('/image/<int:image_id>/interaction/<int:interaction_id>/delete/')
+def deleteInteraction(image_id, interaction_id): 
+    if 'session_user_id' not in session: 
+        flash("You must be logged in to access this site.")
+        return redirect('/')
+    data = {
+        'session_user_id': session['session_user_id']
+        , 'interaction_id' : interaction_id
+        , 'image_id' : image_id
+    }
+    interactionRecord = interaction_mod.Interaction_cls.getOneInteraction(data)
+    if session['session_user_id'] != interactionRecord.user_id: 
+        flash("You must be the creator of a comment to delete it.")
+        return redirect(f'/image/{image_id}/')
+    else: 
+        interaction_mod.Interaction_cls.deleteInteraction(data)
+        return redirect(f'/image/{image_id}/')
+
 
 
 

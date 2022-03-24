@@ -27,40 +27,11 @@
             
             <h2>Dojogram Feed</h2>
             <button> <a href="/image/add/">Add Image</a></button>
+            <button> <a href="/dashboardClassic/">View Classic Dashboard</a></button>
 
-            <!-- first very simple table -->
-            <table class="table_01" >
-                <tr>
-                    <th class="th_01">Contributor</th>
-                    <th class="th_01">Image Title</th>
-                    <th class="th_01">File Path</th>
-                    <th class="th_01">Created</th>
-                </tr>
-                
-                {% for rec in getAllImageAllUser %}
-                <tr>
-                    <td class="td_01"> 
-                        {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
-                    </td>    
-                    
-                    <td class="td_01">
-                        {{rec.imageTitle}}
-                    </td>
-                    <td class="td_01">
-                        {{rec.filePath}}
-                    </td>
-                    <td class="td_01">
-                        {% if rec.createdAt %}
-                            {{rec.createdAt.strftime('%Y-%m-%d')}}
-                        {% else %}
-                            No created, buddy!!
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <!-- above is row for each record; below is TABLE for each record -->
+            {% if rec in getAllImageAllUser == None %}
+                <p>There are no Dojogram images yet.  Let's <a href="/image/add/">create one!</a></p>
+            {% else %}
 
             {% for rec in getAllImageAllUser %}
 
@@ -76,7 +47,7 @@
                         Contributor:
                     </td>
                     <td class="td_01"> 
-                        {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
+                        <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a> ({{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}}) 
                     </td>    
                 </tr>
 
@@ -88,7 +59,19 @@
                         {{rec.imageTitle}} 
                     </td>    
                 </tr>
-
+                <tr>
+                    <td class="td_01"> 
+                        Image Info:
+                    </td>
+                    <td class="td_01"> 
+                        <p>
+                            {% set arbitraryVariable = rec.imageInfo.split("\r\n") %} 
+                            {% for row in arbitraryVariable: %}
+                                {{row}} <br>
+                            {% endfor %}
+                        </p>
+                    </td>    
+                </tr>
                 <tr>
                     <td class="td_01"> 
                         File path:
@@ -116,39 +99,10 @@
                         
                     </td>
                 </tr>
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        Interactions: (might be pie in sky for now) 
-                    </td>
-                </tr>
 
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        <table class="table_01" >
-                            <tr>
-                                <td class="td_01">
-                                    comment creator:
-                                </td>
-                                
-                                <td class="td_01">
-                                    comment text
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td_01">
-                                    Example UserName
-                                </td>
-                                <td class="td_01">
-                                    Example Comment
-                                </td>
-                            </tr>
-                            
-                        </table>
-                    </td>
-                </tr>
             </table>
             {% endfor %}
-
+            {% endif %}
             
         </div>
     </main>

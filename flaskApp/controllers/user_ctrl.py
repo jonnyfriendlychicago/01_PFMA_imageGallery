@@ -139,6 +139,20 @@ def dashboard():
         , getAllImageAllUser = image_mod.Image_cls.getAllImageAllUser()
     )
 
+@app.route('/dashboardClassic/')
+def dashboardClassic(): 
+    if 'session_user_id' not in session: 
+        flash("Please login to access this site.")
+        return redirect('/')
+    data = {
+        "session_user_id": session['session_user_id']
+    }
+    return render_template(
+        'dashboardClassic.html'
+        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getAllImageAllUser = image_mod.Image_cls.getAllImageAllUser()
+    )
+
 @app.route('/profile/<int:user_id>/')
 def profile(user_id): 
     if 'session_user_id' not in session: 
