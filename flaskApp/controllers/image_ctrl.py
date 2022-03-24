@@ -48,6 +48,7 @@ def viewImage(image_id):
         , getOneImageOneUser = image_mod.Image_cls.getOneImageOneUser(data)
         # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
         , getOneImage = image_mod.Image_cls.getOneImage(data)   
+        , getOneImageAllInterAllUser = image_mod.Image_cls.getOneImageAllInterAllUser(data)
     )
 
 

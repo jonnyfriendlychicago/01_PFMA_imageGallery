@@ -1,5 +1,6 @@
 from flaskApp.config.mysqlconnection import connectToMySQL
 from flaskApp.models import user_mod
+from flaskApp.models import interaction_mod
 
 class Image_cls: 
     db = 'imageGallery_sch' # here, we are creating a reliable variable 'db' so that when we inevitably change the name of the db we are referencing, we only need to change this line to reflect that. 
@@ -14,8 +15,7 @@ class Image_cls:
         self.user_id = data['user_id']
         
         self.createdByUser = None
-        # self.createdByUser_Dos = None
-        # self.allImageAllUserList = []
+        self.InteractionSolutionVar = None
 
     @classmethod
     def getAllImageOneUser(cls, data): 
@@ -67,6 +67,8 @@ class Image_cls:
             allImageAllUserList.append(userImageObj)
 
         return allImageAllUserList
+
+
     
     #below is editted version of above; goal: just ONE image and it's user data.  it works, but could make this a lot simpler with refactored approach; get back to that later. 
     @classmethod
@@ -145,3 +147,46 @@ class Image_cls:
         return connectToMySQL(cls.db).query_db(q, data)
 
             
+# working on interations display here!
+    @classmethod
+    def getOneImageAllInterAllUser(cls, data):
+        q = "select * from image left join interaction on image.id = interaction.image_id left join user on interaction.user_id = user.id where image.id = %(image_id)s order by interaction.createdAt;"
+        result = connectToMySQL(cls.db).query_db(q, data)
+        allImageAllUserList = []
+        for row in result:
+            userImageObj = cls (row)
+            
+            # begin repurpose
+            interactionData = {
+                'id' : row['interaction.id']
+                , 'comment' : row['comment']
+                , 'createdAt' : row['interaction.createdAt']
+                , 'updatedAt' : row['interaction.updatedAt']
+                , 'user_id' : row['interaction.user_id']
+                , 'image_id' : row['image_id']
+            }           
+            someVariable = interaction_mod.Interaction_cls(interactionData)
+            userImageObj.InteractionSolutionVar = someVariable
+            # end repurpose 
+            
+            # begin the boilerplate for table data we're joining/grabbing with next line
+            userData = {
+                'id' : row['user.id']
+                , 'userName' : row['userName']
+                , 'email' : row['email']
+                , 'firstName' : row['firstName']
+                , 'lastName' : row['lastName']
+                , 'password' : row['password']
+                , 'accessLevel' : row['accessLevel']
+                , 'createdAt' : row['user.createdAt']
+                , 'updatedAt' : row['user.updatedAt']
+            }           
+            oneUser = user_mod.User_cls(userData)
+            userImageObj.createdByUser = oneUser
+            # end boilerplate 
+
+            # for add'l tables/objects, next line stays, except NOW add on the othe objects to the parenthesis, preceded by comma 
+            allImageAllUserList.append(userImageObj)
+
+        return allImageAllUserList
+

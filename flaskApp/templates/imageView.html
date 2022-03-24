@@ -26,14 +26,12 @@
             <h1>Single Image View</h1>
             
             {% for rec in getOneImageOneUser %}
-
             <table class="table_01" >
                 <tr> 
                     <td colspan="2" class="td_01">
                         <img src="{{rec.filePath}}" alt="some image" width="400">    
                     </td>
                 </tr>
-                
                 <tr>
                     <td class="td_01"> 
                         Contributor:
@@ -42,7 +40,6 @@
                         {{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}} 
                     </td>    
                 </tr>
-
                 <tr>
                     <td class="td_01"> 
                         Image Title:
@@ -51,7 +48,6 @@
                         {{rec.imageTitle}} 
                     </td>    
                 </tr>
-
                 <tr>
                     <td class="td_01"> 
                         File path:
@@ -60,7 +56,6 @@
                         {{rec.filePath}}
                     </td>    
                 </tr>
-
                 <tr>
                     <td class="td_01"> 
                         Created:
@@ -110,6 +105,10 @@
                 </tr>
             </table>
             {% endfor %}
+
+
+            getOneImageAllInterAllUser
+
 
             
         </div>
