@@ -30,6 +30,7 @@ class User_cls:
     @staticmethod
     def validateRegistration(registrationForm):
         isValid = True
+
         q = 'select * from user where email = %(email)s;'
         result = connectToMySQL(User_cls.db).query_db(q, registrationForm)
         if len(result) >= 1: 
@@ -77,6 +78,30 @@ class User_cls:
             flash("Password entries must match.")
         return  isValid
 
+    @staticmethod
+    def validateProfileEdit(profileEditForm):
+        isValid = True
+        # not gonna allow edits to email or username right now, b/c validation there will be more complex:
+        # assume user doens't want to change email addy, just "resubmit" the existing email addy.
+        # well, there will be one and only one record in the db with that email addy already: this very user!
+        # which means, the validation on email will always fail.
+        # in order to make this work, need the validation to check: is there any OTHER user with this email addy already? 
+
+        if not NAME_REGEX.match(profileEditForm['firstName']): 
+            isValid = False
+            flash("First name required.  Only letters, spaces and hypen/dash/- allowed.")
+
+        # if len(registrationForm['lastName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+        #     isValid = False
+        #     flash("Last name required.")
+        
+        if not NAME_REGEX.match(profileEditForm['lastName']): 
+            isValid = False
+            flash("Last name required.  Only letters, spaces and hypen/dash/- allowed.")
+
+        # leaving off password update/validation for now, same reason: more complexity.
+        # password update probably ought to be handled with sep edit module if for this reason alone.
+        
     @classmethod
     def getSessionUser(cls, data):
         q = 'select * from user where id = %(session_user_id)s;'
@@ -119,7 +144,11 @@ class User_cls:
 
     @classmethod
     def updateUser (cls, data):
+        """
         q = "update user set userName = %(userName)s, email = %(email)s, firstName = %(firstName)s, lastName = %(lastName)s where id = %(user_id)s;" 
+        """
+        # whacked above, b/c we stepping back from allowing edits to username or email for now
+        q = "update user set firstName = %(firstName)s, lastName = %(lastName)s where id = %(user_id)s;" 
         return connectToMySQL(cls.db).query_db(q, data)
 
     # not using below with this build yet

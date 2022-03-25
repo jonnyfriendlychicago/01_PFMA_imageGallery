@@ -173,6 +173,36 @@ def profile(user_id):
         , getAllImageOneUser = image_mod.Image_cls.getAllImageOneUser(data)
     )
 
+# below is profileEdit that I started messing with, screw it!
+"""
+@app.route('/profile/<int:user_id>/edit/')
+def profileEdit(user_id): 
+    if 'session_user_id' not in session: 
+        flash("You must be logged in to access this site.")
+        return redirect('/')
+    data = {
+        # "user_id": session['user_id']
+        'session_user_id': session['session_user_id']
+        , 'user_id': user_id
+        # , 'userName': request.form['userName']
+        # , 'email': request.form['email']
+        # , 'firstName': request.form['firstName']
+        # , 'lastName': request.form['lastName']
+    }
+    getOneUser = user_mod.User_cls.getOneUser(data)
+    if session['session_user_id'] != getOneUser.id:
+        flash("You can only edit your own profile.")
+        return redirect(f'/profile/{user_id}/')
+    return render_template(
+        'profileEdit.html'
+        # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
+        , getOneUser = getOneUser
+        # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
+    )
+"""
+# below is editProfile golden original site.  above is me attempting to add validation to it, test it out. 
+
 @app.route('/profile/<int:user_id>/edit/')
 def profileEdit(user_id): 
     if 'session_user_id' not in session: 
@@ -199,14 +229,18 @@ def profileEdit(user_id):
         # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
     )
 
+
 @app.route('/profile/<int:user_id>/update/', methods =['POST'])
 def profileUpdate(user_id):
+    # isValid = user_mod.User_cls.validateProfileEdit(request.form)
+    # if not isValid:
+    #     return redirect(f'/profile/{user_id}') # don't worry about msgs, b/c that's already handled with the flash on that classMethod
     data = {
         'user_id': user_id
-        , 'userName': request.form['userName']
-        , 'email': request.form['email']
+        # , 'userName': request.form['userName']
+        # , 'email': request.form['email']
         , 'firstName': request.form['firstName']
         , 'lastName': request.form['lastName'] 
     }
-    updateProfile = user_mod.User_cls.updateUser(data)
+    user_mod.User_cls.updateUser(data)
     return redirect(f'/profile/{user_id}/')
