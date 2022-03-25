@@ -7,6 +7,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    background-color: black;
     /* margin-top: 3px; */
     /* border: 1px solid red;  */
 }
@@ -14,7 +15,7 @@ header {
     width: 100%; 
     display: flex; 
     justify-content: center; 
-    background-color: aquamarine;
+    background-color: rgb(36, 131, 240);  
     height: 100px; 
     align-items: center;
 }
@@ -57,14 +58,41 @@ main {
     flex-direction: column;
     justify-content: flex-start;
     /* align-items: center; */
-    margin-top: 3px;
+    /* margin-top: 3px; */
     /* border: 1px solid red;  */
     width: 85%; 
     /* padding-left: 10%; */
     /* padding-right: 10%; */
     background-color: lightgrey;
+    /* height: 750px;  */
+    /* height: fit-content; */
+    padding-top: 10px;
+    height: fit-content;
 }
 
+.messages {
+    width: 85%;
+    background-color: rgb(211, 211, 211);
+    height: fit-content;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: black;
+    
+}
+
+.messagesErrorText {
+    color: red; 
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.registerLoginContainer {
+    height: 750px; 
+}
 .row_left {
     width: 100%;
     padding-left: 50px; 

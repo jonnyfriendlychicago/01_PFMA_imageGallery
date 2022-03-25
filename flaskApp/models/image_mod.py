@@ -17,6 +17,8 @@ class Image_cls:
         self.createdByUser = None
         self.InteractionSolutionVar = None
 
+        self.InteractionsOnImageList = [] #added, trying to do method like the learn platform tells me to. 
+
     @classmethod
     def getAllImageOneUser(cls, data): 
         q = 'select * from image where user_id = %(user_id)s order by createdAt desc;'
@@ -48,6 +50,7 @@ class Image_cls:
         for row in result:
             # begin the boilerplate for table data we're joining/grabbing with next line
             userImageObj = cls (row)
+            #dont forget: below dataset needs to include ALL fields in the table we are left joining to
             userData = {
                 'id' : row['user.id']
                 , 'userName' : row['userName']
@@ -63,13 +66,10 @@ class Image_cls:
             userImageObj.createdByUser = oneUser
             # end boilerplate 
 
-            # for add'l tables/objects, next line stays, except NOW add on the othe objects to the parenthesis, preceded by comma 
             allImageAllUserList.append(userImageObj)
 
         return allImageAllUserList
 
-
-    
     #below is editted version of above; goal: just ONE image and it's user data.  it works, but could make this a lot simpler with refactored approach; get back to that later. 
     @classmethod
     def getOneImageOneUser(cls, data):
@@ -100,28 +100,6 @@ class Image_cls:
 
         return allImageAllUserList
 
-
-
-
-# self.createdByUser = None
-# self.allImageAllUserList = [] 
-            
-        #     userImageObj.allImageAllUserList.append(user_mod.User_cls(imageUserData))
-        # return userImageObj
-
-
-
-
-    # # below is the getAllImageAllUser that is working 100%; added the XXX to the def name so it won't conflict with my attempt above.
-    # @classmethod
-    # def getAllImageAllUserXXX(cls): 
-    #     q = 'select * from image order by createdAt desc;'
-    #     result = connectToMySQL(cls.db).query_db(q)
-    #     imageList = []
-    #     for row in result: 
-    #         imageList.append(cls(row))
-    #     return imageList
-
     @classmethod
     def getOneImage(cls, data):
         q = "select * from image where id = %(image_id)s;"
@@ -150,7 +128,7 @@ class Image_cls:
     def getOneImageAllInterAllUser(cls, data):
         q = "select * from image left join interaction on image.id = interaction.image_id left join user on interaction.user_id = user.id where image.id = %(image_id)s order by interaction.createdAt desc;"
         result = connectToMySQL(cls.db).query_db(q, data)
-        allImageAllUserList = []
+        getOneImageAllInterAllUserList = []
         for row in result:
             userImageObj = cls (row)
             
@@ -184,7 +162,7 @@ class Image_cls:
             # end boilerplate 
 
             # for add'l tables/objects, next line stays, except NOW add on the othe objects to the parenthesis, preceded by comma 
-            allImageAllUserList.append(userImageObj)
-
-        return allImageAllUserList
+            getOneImageAllInterAllUserList.append(userImageObj)
+            # print(getOneImageAllInterAllUserList[0].InteractionSolutionVar.id)
+        return getOneImageAllInterAllUserList
 

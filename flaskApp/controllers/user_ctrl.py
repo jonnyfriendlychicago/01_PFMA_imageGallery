@@ -22,19 +22,18 @@ def register():
     isValid = user_mod.User_cls.validateRegistration(request.form)
     if not isValid:
         return redirect('/') # don't worry about msgs, b/c that's already handled with the flash on that classMethod
-    newUser = {
+    data = {
         'userName': request.form['userName'], 
         'email': request.form['email'], 
         'firstName': request.form['firstName'], 
         'lastName': request.form['lastName'], 
         'password': bcrypt.generate_password_hash(request.form['password'])
     }
-    user_id = user_mod.User_cls.saveUser(newUser)
-    if not user_id: # this if basically means: someone, that save just didn't work, so we are dropping the save/create process and returning you to login. 
+    newUserId = user_mod.User_cls.saveUser(data)
+    if not newUserId: # this if basically means: somehow, that save just didn't work, so we are dropping the save/create process and returning you to login. 
         flash("Our apologies.  Our system seems to be experiencing technical issues.  Please call our office at 123.456.7890 for further assistance.")
         return redirect('/')
-    # session['user_id'] = user_id
-    session['session_user_id'] = user_id # saveUser classmethod returns the id of the newly created user
+    session['session_user_id'] = newUserId # saveUser classmethod returns the id of the newly created user. set that as the session_user_id immediamente
     flash("New Account created.")
     return redirect('/userTypeRouting/')
 
@@ -63,6 +62,8 @@ def userTypeRouting():
         "session_user_id": session['session_user_id']
     }
     return redirect('/dashboard/')
+
+    """ all of below exists to either auto upgrade certain user accounts OR route users of certain types to pages other than dashboard.  Implement as needed."""
     # creating code to maker certain users an employee upon reaching this page.
     # NEED MORE EXPLANATION ON BELOW PLEASE ::: simple: just to prove that the two diff emp levels actually works
     # theUser = User_cls.get_oneUser(data)  
@@ -97,6 +98,7 @@ def logout():
     session.clear()
     return redirect('/')
 
+""" all of below is set up to manage users.  activate this functionality as needed."""
 # @app.route('/users/')
 # def users():
 #     if 'user_id' not in session: # this whole user_Id check needs to happen on every page that should be requiring a successful login
@@ -135,7 +137,8 @@ def dashboard():
     }
     return render_template(
         'dashboard.html'
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        # below line is my big get-all, for repurposing as needed. 
         , getAllImageAllUser = image_mod.Image_cls.getAllImageAllUser()
     )
 
@@ -149,7 +152,7 @@ def dashboardClassic():
     }
     return render_template(
         'dashboardClassic.html'
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) 
         , getAllImageAllUser = image_mod.Image_cls.getAllImageAllUser()
     )
 
@@ -164,8 +167,8 @@ def profile(user_id):
     }
     return render_template(
         'profile.html'
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
-        , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
+        , getOneUser = user_mod.User_cls.getOneUser(data)
         # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
         , getAllImageOneUser = image_mod.Image_cls.getAllImageOneUser(data)
     )
@@ -184,15 +187,15 @@ def profileEdit(user_id):
         # , 'firstName': request.form['firstName']
         # , 'lastName': request.form['lastName']
     }
-    get_oneUser = user_mod.User_cls.get_oneUser(data)
-    if session['session_user_id'] != get_oneUser.id:
+    getOneUser = user_mod.User_cls.getOneUser(data)
+    if session['session_user_id'] != getOneUser.id:
         flash("You can only edit your own profile.")
         return redirect(f'/profile/{user_id}/')
     return render_template(
         'profileEdit.html'
         # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
-        , dsp_get_oneUser = get_oneUser
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) # just built 7:19pm tues
+        , getOneUser = getOneUser
         # , dsp_getUserImage = user_mod.User_cls.getUserImage(data)
     )
 

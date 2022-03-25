@@ -12,112 +12,108 @@
         <h1>Welcome to Dojogram. Please register/sign in.</h1>
     </header>
     <div class="messages">
-        {% with messages = get_flashed_messages() %}
-            {%if messages %}
-                {% for m in messages %}
-                    <h5>{{m}}</h5>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% block msg %} {% include 'messages.html' %} {% endblock msg %}
     </div>
     <main>
-        <div class="row_flex_center_top"> 
-            <div class="container_01"> 
-                <h2>Register</h2>
-                <table class="table_03">
-                    <form action="/register/" method='post'>
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="email">Email: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="email" name="email" value = {{session.email}}>
-                            </td>
-                        </tr>
+        <div class="registerLoginContainer"> 
+            <div class="row_flex_center_top"> 
+                <div class="container_01"> 
+                    <h2>Register</h2>
+                    <table class="table_03">
+                        <form action="/register/" method='post'>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="email">Email: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="email" name="email" value = {{session.email}}>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="userName">userName: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="text" name="userName">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="userName">userName: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="text" name="userName">
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="firstName">First Name: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="text" name="firstName">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="firstName">First Name: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="text" name="firstName">
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="lastName">Last Name: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="text" name='lastName'>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="lastName">Last Name: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="text" name='lastName'>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="password">Password: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="password" name="password">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="password">Password: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="password" name="password">
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="confirm">Confirm Password: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="password" name="confirm">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="confirm">Confirm Password: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="password" name="confirm">
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td colspan="2" class="td_03_span2">
-                                <button>Register + Login</button>
-                            </td>
-                        </tr>
-                    </form>
-                </table>
-            </div>
-            
-            <div class="container_01"> 
-                <h2>Login</h2>
-                <table class="table_03">
-                    <form action="/login/" method='post'>
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="email">Email: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="text" name='email'>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="2" class="td_03_span2">
+                                    <button>Register + Login</button>
+                                </td>
+                            </tr>
+                        </form>
+                    </table>
+                </div>
+                
+                <div class="container_01"> 
+                    <h2>Login</h2>
+                    <table class="table_03">
+                        <form action="/login/" method='post'>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="email">Email: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="text" name='email'>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td class="td_03_right">
-                                <label for="password">Password: </label>
-                            </td>
-                            <td class="td_03">
-                                <input type="password" name='password'>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="td_03_right">
+                                    <label for="password">Password: </label>
+                                </td>
+                                <td class="td_03">
+                                    <input type="password" name='password'>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td colspan="2" class="td_03_span2">
-                                <button>Login</button>
-                            </td>
-                        </tr>
-                    </form>
-                </table>
+                            <tr>
+                                <td colspan="2" class="td_03_span2">
+                                    <button>Login</button>
+                                </td>
+                            </tr>
+                        </form>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

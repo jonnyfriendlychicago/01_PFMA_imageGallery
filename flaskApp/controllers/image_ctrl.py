@@ -16,7 +16,7 @@ def addImage():
     }
     return render_template(
         'imageAdd.html' 
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) # this is what always *minimally* populates the header section  correctly
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) # this is what always *minimally* populates the header section  correctly
         # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
     )
 
@@ -44,7 +44,7 @@ def viewImage(image_id):
     }
     return render_template(
         'imageView.html'
-        , dsp_getSessionUser = user_mod.User_cls.getSessionUser(data) 
+        , getSessionUser = user_mod.User_cls.getSessionUser(data) 
         , getOneImageOneUser = image_mod.Image_cls.getOneImageOneUser(data)
         # , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data) 
         , getOneImage = image_mod.Image_cls.getOneImage(data)   
@@ -60,26 +60,26 @@ def editImage(image_id):
     data = {
         'session_user_id': session['session_user_id']
         , 'image_id': image_id
-        , 'imageTitle': request.form['imageTitle']
-        , 'imageInfo': request.form['imageInfo'] 
     }
-    get_oneImage = image_mod.Image_cls.getOne(data)
-    if session['user_id'] != get_oneImage.user_id:
+    getOneImage = image_mod.Image_cls.getOneImage(data)
+    if session['session_user_id'] != getOneImage.user_id:
         flash("You must be the creator of an image to edit the image.")
-        return redirect('/')
+        return redirect(f'/image/{image_id}/')
     else: 
         return render_template(
         'imageEdit.html' 
-        , dsp_get_oneUser = user_mod.User_cls.get_oneUser(data)
-        , dsp_get_oneImage = get_oneImage
+        , getOneUser = user_mod.User_cls.getOneUser(data)
+        , getOneImage = getOneImage
     )
 
 @app.route('/image/<int:image_id>/update/', methods=['POST'])
 def updateImage(image_id): 
     data = {
-        'user_id': session['user_id']
+        'session_user_id': session['session_user_id']
         , 'image_id': image_id
         , 'filePath': request.form['filePath']
+        , 'imageTitle': request.form['imageTitle']
+        , 'imageInfo': request.form['imageInfo'] 
     }
     updateImage = image_mod.Image_cls.update(data)
     return redirect(f'/image/{image_id}/')

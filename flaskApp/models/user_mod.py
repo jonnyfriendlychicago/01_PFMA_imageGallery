@@ -4,6 +4,8 @@ from flaskApp.models import image_mod
 
 import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+NAME_REGEX = re.compile(r'^[a-zA-Z -]+$') #WORKS!
+USERNAME_REGEX = re.compile(r'^[a-zA-Z0-9]+$') #WORKS!
 
 class User_cls: 
     db = 'imageGallery_sch'
@@ -34,8 +36,8 @@ class User_cls:
             isValid = False
             flash("Email already in use.")
         
-        q_two = 'select * from user where userName = %(userName)s;'
-        result_two = connectToMySQL(User_cls.db).query_db(q_two, registrationForm)
+        q = 'select * from user where userName = %(userName)s;'
+        result_two = connectToMySQL(User_cls.db).query_db(q, registrationForm)
         if len(result_two) >= 1: 
             isValid = False
             flash("Username already in use.")
@@ -43,18 +45,36 @@ class User_cls:
         if not EMAIL_REGEX.match(registrationForm['email']): 
             isValid = False
             flash("Invalid email address.")
-        if len(registrationForm['firstName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+        
+        if not USERNAME_REGEX.match(registrationForm['userName']): 
             isValid = False
-            flash("First name required.")
-        if len(registrationForm['lastName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+            flash("User name required.  Only letters and numbers allowed.")
+
+        # the "len" check below on firstname and lastName is already handled by the NAME_REGEX check
+
+        # if len(registrationForm['firstName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
+        #     isValid = False
+        #     flash("First name required.")
+        
+        if not NAME_REGEX.match(registrationForm['firstName']): 
             isValid = False
-            flash("Last name required.")
-        # if len(user['password']) < 8:
+            flash("First name required.  Only letters, spaces and hypen/dash/- allowed.")
+
+        # if len(registrationForm['lastName']) < 1: # orig code says 2 char, but 1 seems better to me.  Malcolm X !
         #     isValid = False
-        #     flash("Password must be at least 8 characters, ")
-        # if user['password'] != user['confirm']:
-        #     isValid = False
-        #     flash("Password entries must match.")
+        #     flash("Last name required.")
+        
+        if not NAME_REGEX.match(registrationForm['lastName']): 
+            isValid = False
+            flash("Last name required.  Only letters, spaces and hypen/dash/- allowed.")
+
+        if len(registrationForm['password']) < 1: # pop this up for EXAM!!!!!
+            isValid = False
+            flash("Password required.  Must be at least 8 characters.")
+        
+        if registrationForm['password'] != registrationForm['confirm']:
+            isValid = False
+            flash("Password entries must match.")
         return  isValid
 
     @classmethod
@@ -66,13 +86,14 @@ class User_cls:
         return cls(result[0])
     
     @classmethod
-    def get_oneUser(cls, data):
+    def getOneUser(cls, data):
         q = 'select * from user where id = %(user_id)s;'
         result = connectToMySQL(cls.db).query_db(q, data)
         if len(result) <1:
             return False
         return cls(result[0])
 
+    # not using below with this build yet
     @classmethod
     def get_allUser(cls, data):
         q = 'select * from user;'
@@ -82,7 +103,7 @@ class User_cls:
             userList.append(cls(row))
         return userList
 
-    # only used for login validation, as a rule    
+    # only used for login validation, as a rule.  leave funny "get_" name for now  
     @classmethod
     def get_userEmail(cls, data):
         q = 'select * from user where email = %(email)s;'
@@ -93,8 +114,6 @@ class User_cls:
 
     @classmethod
     def saveUser(cls, data):
-        # below is deliberately leaving out accessLevel... yes? 
-        # also, orig code left OUT createdAt & updatedAt... which I'm adding now. 
         q = 'insert into user (userName, firstName, lastName, email, password, createdAt, updatedAt) values (%(userName)s,  %(firstName)s, %(lastName)s, %(email)s, %(password)s, NOW(), NOW() );'
         return connectToMySQL(cls.db).query_db(q, data)
 
@@ -103,6 +122,7 @@ class User_cls:
         q = "update user set userName = %(userName)s, email = %(email)s, firstName = %(firstName)s, lastName = %(lastName)s where id = %(user_id)s;" 
         return connectToMySQL(cls.db).query_db(q, data)
 
+    # not using below with this build yet
     @classmethod
     def updateUserEmpType (cls, data):
         q = 'update user set accessLevel = 9 where id = %(id)s;'
@@ -112,23 +132,24 @@ class User_cls:
     @classmethod
     def delete (cls, data):
         pass
-
-    @classmethod
-    def getUserImageXXX(cls, data):
-        q = 'select * from user left join image on user.id = image.user_id where user.id = %(user_id)s;'
-        result = connectToMySQL(cls.db).query_db(q, data)
-        userImageObj = cls (result[0])
-        for row in result:
-            # if row['image.id'] == None: 
-            #     break
-            imageData = {
-                'id' : row['image.id']
-                , 'imageTitle' : row['imageTitle']
-                , 'imageInfo' : row['imageInfo']
-                , 'filePath' : row['filePath']
-                , 'createdAt' : row['image.createdAt']
-                , 'updatedAt' : row['image.updatedAt']
-                , 'user_id' : row['user_id']
-            }
-            userImageObj.userImagesList.append(image_mod.Image_cls(imageData))
-        return userImageObj
+    
+    """ below is junk we started working on"""
+    # @classmethod
+    # def getUserImageXXX(cls, data):
+    #     q = 'select * from user left join image on user.id = image.user_id where user.id = %(user_id)s;'
+    #     result = connectToMySQL(cls.db).query_db(q, data)
+    #     userImageObj = cls (result[0])
+    #     for row in result:
+    #         # if row['image.id'] == None: 
+    #         #     break
+    #         imageData = {
+    #             'id' : row['image.id']
+    #             , 'imageTitle' : row['imageTitle']
+    #             , 'imageInfo' : row['imageInfo']
+    #             , 'filePath' : row['filePath']
+    #             , 'createdAt' : row['image.createdAt']
+    #             , 'updatedAt' : row['image.updatedAt']
+    #             , 'user_id' : row['user_id']
+    #         }
+    #         userImageObj.userImagesList.append(image_mod.Image_cls(imageData))
+    #     return userImageObj

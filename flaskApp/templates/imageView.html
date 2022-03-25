@@ -9,154 +9,152 @@
 </head>
 <body>
     <header>
-        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+        {% block header %} {% include 'header.html' %} {% endblock header %}
     </header>
-
     <div class="messages">
-        {% with messages = get_flashed_messages() %}
-            {%if messages %}
-                {% for m in messages %}
-                    <h5>{{m}}</h5>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% block msg %} {% include 'messages.html' %} {% endblock msg %}
     </div>
     <main>
         <div class="row_left"> 
-            <h1>Single Image View</h1>
+            <h1>Dojo Image View</h1>
             <button> <a href="/dashboard/">Dashboard</a></button>
-            {%if getOneImage.user_id ==  dsp_getSessionUser.id %}
+            {%if getOneImage.user_id ==  getSessionUser.id %}
                 <button> <a href="/image/{{getOneImage.id}}/delete/">Delete Image (and its interactions)</a></button>
             {% else %}
             {% endif %}
             
             {% for rec in getOneImageOneUser %}
-            <table class="table_01" >
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        <img src="{{rec.filePath}}" alt="some image" width="400">    
-                    </td>
-                </tr>
-                <tr>
-                    <td class="td_01"> 
-                        Contributor:
-                    </td>
-                    <td class="td_01"> 
-                        <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a> ({{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}}) 
-                    </td>    
-                </tr>
-                <tr>
-                    <td class="td_01"> 
-                        Image Title:
-                    </td>
-                    <td class="td_01"> 
-                        {{rec.imageTitle}} 
-                    </td>    
-                </tr>
-                <tr>
-                    <td class="td_01"> 
-                        Image Info:
-                    </td>
-                    <td class="td_01"> 
-                        <p>
-                            {% set arbitraryVariable = rec.imageInfo.split("\r\n") %} 
-                            {% for row in arbitraryVariable: %}
-                                {{row}} <br>
-                            {% endfor %}
-                        </p>
-                    </td>    
-                </tr>
-                <tr>
-                    <td class="td_01"> 
-                        File path:
-                    </td>
-                    <td class="td_01"> 
-                        {{rec.filePath}}
-                    </td>    
-                </tr>
-                <tr>
-                    <td class="td_01"> 
-                        Created:
-                    </td>
-                    <td class="td_01"> 
-                        {% if rec.createdAt %}
-                            {{rec.createdAt.strftime('%Y-%m-%d')}}
-                        {% else %}
-                            No created, buddy!!
-                        {% endif %}
-                    </td>    
-                </tr>
-
-                {% if rec in getOneImageAllInterAllUser == None %}
-                {% else %}
-                <tr> 
-                    <td colspan="2" class="td_01">
-                        
-                        <table class="table_01" >
-                            <tr>
-                                <td class="td_01">UserName</td>
-                                <td class="td_01">comment</td>
-                                <td class="td_01">PostedAt</td>
-                                <td class="td_01">Actions</td>
-                            </tr>
-                            {% for rec in getOneImageAllInterAllUser %}
-                            <tr>
-                                <td class="td_01"> 
-                                    <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a>
-                                </td>    
-                                <td class="td_01">
-                                    {{rec.InteractionSolutionVar.comment}}
-                                </td>
-                                <td class="td_01">
-                                    {% if rec.InteractionSolutionVar.createdAt %}
-                                        {{rec.InteractionSolutionVar.createdAt.strftime('%Y-%b-%d %-I:%M %p')}}
-                                    {% else %}
-                                        No date here
-                                    {% endif %}
-                                </td>
-                                <td class="td_01">
-                                    {%if rec.InteractionSolutionVar.user_id ==  dsp_getSessionUser.id %}
-                                        <a href="/image/{{rec.id}}/interaction/{{rec.InteractionSolutionVar.id}}/delete/">delete</a>
-                                    {% else %}
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </td>
-                </tr>
-                {% endif %}
-            </table>
-            {% endfor %}
-            
-        </div>
-        <div class="row_left"> 
-            <h1>Comment on this Dojogram</h1>
-            <table class="table_02">
-                <form action="/image/{{getOneImage.id}}/interaction/create/" method="post" > 
+                <table class="table_01" >
                     <tr>
-                        <td class="td_02_bold">
-                            <label for="comment">Comment:</label>
+                        <td class="td_01"> 
+                            Contributor:
                         </td>
-                        <td class="td_02">
-                            <textarea name="comment" rows="10" cols="60"></textarea>
-                        </td>
-                    </tr>    
-                    
-                    <tr>
-                        <td colspan="2" class="td_02">
-                            <button>Save Comment</button>
+                        <td class="td_01"> 
+                            <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a> ({{rec.createdByUser.firstName}} {{rec.createdByUser.lastName}}) 
+                        </td>    
+                    </tr>
+                    <tr> 
+                        <td colspan="2" class="td_01">
+                            <img src="{{rec.filePath}}" alt="some image" width="400">    
                         </td>
                     </tr>
-                </form>
-            </table>
-        </div>
+                    
+                    <tr>
+                        <td class="td_01"> 
+                            Image Title:
+                        </td>
+                        <td class="td_01"> 
+                            {{rec.imageTitle}} 
+                        </td>    
+                    </tr>
+                    <tr>
+                        <td class="td_01"> 
+                            Image Info:
+                        </td>
+                        <td class="td_01"> 
+                            <p>
+                                {% set arbitraryVariable = rec.imageInfo.split("\r\n") %} 
+                                {% for row in arbitraryVariable: %}
+                                    {{row}} <br>
+                                {% endfor %}
+                            </p>
+                        </td>    
+                    </tr>
+                    <tr>
+                        <td class="td_01"> 
+                            File path:
+                        </td>
+                        <td class="td_01"> 
+                            {{rec.filePath}}
+                        </td>    
+                    </tr>
+                    <tr>
+                        <td class="td_01"> 
+                            Created:
+                        </td>
+                        <td class="td_01"> 
+                            {% if rec.createdAt %}
+                                {{rec.createdAt.strftime('%Y-%m-%d')}}
+                            {% else %}
+                                No created, buddy!!
+                            {% endif %}
+                        </td>    
+                    </tr>
+                    <tr> 
+                        <td colspan="2" class="td_01">
+                            
+                            <table class="table_01" >
+                                <tr>
+                                    <td class="td_01">UserName</td>
+                                    <td class="td_01">comment</td>
+                                    <td class="td_01">PostedAt</td>
+                                    <td class="td_01">Actions</td>
+                                </tr>
+                                {% for rec in getOneImageAllInterAllUser %}   
+                                    {% if rec.InteractionSolutionVar.id == None %}
+                                    <tr>
+                                        <td colspan="4" class="td_01">
+                                            No comments yet!
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td class="td_01"> 
+                                            <a href="/profile/{{rec.createdByUser.id}}/">{{rec.createdByUser.userName}}</a>
+                                        </td>    
+                                        <td class="td_01">
+                                            {{rec.InteractionSolutionVar.comment}}
+                                        </td>
+                                        <td class="td_01">
+                                            {% if rec.InteractionSolutionVar.createdAt %}
+                                                {{rec.InteractionSolutionVar.createdAt.strftime('%Y-%b-%d %-I:%M %p')}}
+                                            {% else %}
+                                                No date here
+                                            {% endif %}
+                                        </td>
+                                        <td class="td_01">
+                                            {%if rec.InteractionSolutionVar.user_id ==  getSessionUser.id %}
+                                                <a href="/image/{{rec.id}}/interaction/{{rec.InteractionSolutionVar.id}}/delete/">delete</a>
+                                            {% else %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <table class="table_02">
+                            <form action="/image/{{getOneImage.id}}/interaction/create/" method="post" > 
+                                <tr>
+                                    <td colspan="2" class="td_02">
+                                        <h1>Comment on this Dojogram</h1>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td class="td_02_bold">
+                                        <label for="comment">Comment:</label>
+                                    </td>
+                                    <td class="td_02">
+                                        <textarea name="comment" rows="10" cols="50"></textarea>
+                                    </td>
+                                </tr>    
+                                
+                                <tr>
+                                    <td colspan="2" class="td_02">
+                                        <button>Save Comment</button>
+                                    </td>
+                                </tr>
+                            </form>
+                        </table>
+                    </tr>
+                    
+                </table>
+            {% endfor %}
     </main>
-    
-
-    
     <footer>
-
     </footer>
 </body>
 </html>

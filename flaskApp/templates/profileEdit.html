@@ -9,29 +9,23 @@
 </head>
 <body>
     <header>
-        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+        {% block header %} {% include 'header.html' %} {% endblock header %}
     </header>
     <div class="messages">
-        {% with messages = get_flashed_messages() %}
-            {%if messages %}
-                {% for m in messages %}
-                    <h5>{{m}}</h5>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% block msg %} {% include 'messages.html' %} {% endblock msg %}
     </div>
     <main>
         <div class="row_left"> 
-            <h1>ProfileEditScreen for {{dsp_get_oneUser.userName}}</h1>  
+            <h1>ProfileEditScreen for {{getOneUser.userName}}</h1>  
 
             <table class="table_03">
-                <form action="/profile/{{dsp_get_oneUser.id}}/update/" method="post" > 
+                <form action="/profile/{{getOneUser.id}}/update/" method="post" > 
                     <tr>
                         <td class="td_03_right">
                             <label for="email">Email:</label>
                         </td>
                         <td class="td_03">
-                            <input type="text" name="email" value="{{dsp_get_oneUser.email}}">
+                            <input type="text" name="email" value="{{getOneUser.email}}">
                         </td>
                     </tr>
 
@@ -40,7 +34,7 @@
                             <label for="userName">userName:</label>
                         </td>
                         <td class="td_03">
-                            <input type="text" name="userName" value="{{dsp_get_oneUser.userName}}">
+                            <input type="text" name="userName" value="{{getOneUser.userName}}">
                         </td>
                     </tr>
 
@@ -49,7 +43,7 @@
                             <label for="firstName">First Name:</label>
                         </td>
                         <td class="td_03">
-                            <input type="text" name="firstName" value="{{dsp_get_oneUser.firstName}}">
+                            <input type="text" name="firstName" value="{{getOneUser.firstName}}">
                         </td>
                     </tr>
 
@@ -58,7 +52,7 @@
                             <label for="lastName">Last Name:</label>
                         </td>
                         <td class="td_03">
-                            <input type="text" name="lastName" value="{{dsp_get_oneUser.lastName}}">
+                            <input type="text" name="lastName" value="{{getOneUser.lastName}}">
                         </td>
                     </tr>
 
@@ -69,9 +63,6 @@
                     </tr>
                 </form>
             </table>
-
-
-            <!-- <button> <a href="/image/add/">Add Image</a></button> -->
         </div>
     </main>
     

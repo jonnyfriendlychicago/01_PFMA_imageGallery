@@ -9,24 +9,18 @@
 </head>
 <body>
     <header>
-        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+        {% block header %} {% include 'header.html' %} {% endblock header %}
     </header>
     <div class="messages">
-        {% with messages = get_flashed_messages() %}
-            {%if messages %}
-                {% for m in messages %}
-                    <h5>{{m}}</h5>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% block msg %} {% include 'messages.html' %} {% endblock msg %}
     </div>
     <main>
         <div class="row_left"> 
             <h1>
-            {%if dsp_getSessionUser.id ==  dsp_get_oneUser.id %}
+            {%if getSessionUser.id ==  getOneUser.id %}
                 My Profile
             {% else %}
-            {{dsp_get_oneUser.userName}}
+            {{getOneUser.userName}}
             {% endif %}
             </h1>  
 
@@ -36,7 +30,7 @@
                         Email:
                     </td>
                     <td class="td_03">
-                        {{dsp_get_oneUser.email}}
+                        {{getOneUser.email}}
                     </td>
                 </tr>
 
@@ -45,7 +39,7 @@
                         userName:
                     </td>
                     <td class="td_03">
-                        {{dsp_get_oneUser.userName}}
+                        {{getOneUser.userName}}
                     </td>
                 </tr>
 
@@ -54,7 +48,7 @@
                         First Name:
                     </td>
                     <td class="td_03">
-                        {{dsp_get_oneUser.firstName}}
+                        {{getOneUser.firstName}}
                     </td>
                 </tr>
 
@@ -63,14 +57,14 @@
                         Last Name:
                     </td>
                     <td class="td_03">
-                        {{dsp_get_oneUser.lastName}}
+                        {{getOneUser.lastName}}
                     </td>
                 </tr>
 
                 <tr>
                     <td colspan="2" class="td_03_span2">    
-                        {%if dsp_getSessionUser.id ==  dsp_get_oneUser.id %}
-                            <button> <a href="/profile/{{dsp_get_oneUser.id}}/edit/">Edit Profile</a></button>
+                        {%if getSessionUser.id ==  getOneUser.id %}
+                            <button> <a href="/profile/{{getOneUser.id}}/edit/">Edit Profile</a></button>
                         {% else %}
                             <p>Only the user can edit his own profile.</p>
                         {% endif %}

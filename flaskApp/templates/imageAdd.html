@@ -9,22 +9,16 @@
 </head>
 <body>
     <header>
-        {% block menu %} {% include 'header.html' %} {% endblock menu %}
+        {% block header %} {% include 'header.html' %} {% endblock header %}
     </header>
     <div class="messages">
-        {% with messages = get_flashed_messages() %}
-            {%if messages %}
-                {% for m in messages %}
-                    <h5>{{m}}</h5>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% block msg %} {% include 'messages.html' %} {% endblock msg %}
     </div>
     <main>
         <div class="row_left"> 
             <h1>Add an image</h1>
             <table class="table_02">
-                <form action="/image/create/{{dsp_getSessionUser.id}}/" method="post" > 
+                <form action="/image/create/{{getSessionUser.id}}/" method="post" > 
 
                     <!-- <tr>
                         <td colspan="2" class="th_02">
@@ -83,7 +77,7 @@
                     </tr>
                 </form>
             </table>
-            <button> <a href="/profile/{{dsp_getSessionUser.id}}/">Cancel New Image</a></button>
+            <button> <a href="/profile/{{getSessionUser.id}}/">Cancel New Image</a></button>
         </div>
     </main>
 </body>

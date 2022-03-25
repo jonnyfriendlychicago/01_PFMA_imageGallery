@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-    {% block menu %}
+    {% block header %}
     <div class="header_content"> 
         <div class="header_content_vert_left"> 
             <a href="/dashboard/" class="header_home_link" >
@@ -10,14 +10,14 @@
             </a>
         </div>
         <div class="header_content_vert_right"> 
-            <h2>Welcome, {{dsp_getSessionUser.userName}}</h2>
-            <h4>(UserID: {{dsp_getSessionUser.id}})</h4>
+            <h2>Welcome, {{getSessionUser.userName}}</h2>
+            <h4>(UserID: {{getSessionUser.id}})</h4>
             <div class="header_content_horiz_right">
-                <a href="/profile/{{dsp_getSessionUser.id}}/">My Profile</a>
+                <a href="/profile/{{getSessionUser.id}}/">My Profile</a>
                 <a href="/logout/">Logout</a>
             </div>
         </div>
     </div>
-    {% endblock menu %}
+    {% endblock header %}
 </body>
 </html>
